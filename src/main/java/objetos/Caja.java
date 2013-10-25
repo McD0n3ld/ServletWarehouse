@@ -9,6 +9,15 @@ public class Caja {
 	//campo opcional no necesario (solo informativo)
 	private String warehouse_location;
 	private boolean estado;	//false = en ninguna warehouse ; true = en alguna warehouse
+	private boolean nuevo = false;
+
+	public boolean isNuevo() {
+		return nuevo;
+	}
+
+	public void setNuevo(boolean nuevo) {
+		this.nuevo = nuevo;
+	}
 
 	public boolean getEstado() {
 		return estado;

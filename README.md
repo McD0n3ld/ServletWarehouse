@@ -1,15 +1,16 @@
-create user 'warehouse_sql'@'localhost' identified by '1234';
-grant all privileges on datasource_warehouse.* to 'warehouse_sql'@'localhost';
+create user 'raul'@'localhost' identified by '1234';
+grant all privileges on * to 'raul'@'localhost';
 flush privileges;
 exit;
-mysql -u warehouse_sql -p
+
+mysql -u raul -p
 1234
+
 create database datasource_warehouse;
 use datasource_warehouse;
 CREATE TABLE Warehouses (
    Code INTEGER NOT NULL,
    Location VARCHAR(255) NOT NULL ,
-   Capacity INTEGER NOT NULL,
    PRIMARY KEY (Code)
  );
 CREATE TABLE Boxes (
@@ -20,11 +21,12 @@ CREATE TABLE Boxes (
     PRIMARY KEY (Code),
     FOREIGN KEY (Warehouse) REFERENCES Warehouses(Code)
  ) ENGINE=INNODB;
- INSERT INTO Warehouses(Code,Location,Capacity) VALUES(1,'Chicago',3);
- INSERT INTO Warehouses(Code,Location,Capacity) VALUES(2,'Chicago',4);
- INSERT INTO Warehouses(Code,Location,Capacity) VALUES(3,'New York',7);
- INSERT INTO Warehouses(Code,Location,Capacity) VALUES(4,'Los Angeles',2);
- INSERT INTO Warehouses(Code,Location,Capacity) VALUES(5,'San Francisco',8);
+ 
+ INSERT INTO Warehouses(Code,Location) VALUES(1,'Chicago');
+ INSERT INTO Warehouses(Code,Location) VALUES(2,'Chicago');
+ INSERT INTO Warehouses(Code,Location) VALUES(3,'New York');
+ INSERT INTO Warehouses(Code,Location) VALUES(4,'Los Angeles');
+ INSERT INTO Warehouses(Code,Location) VALUES(5,'San Francisco');
  
  INSERT INTO Boxes(Code,Contents,VALUE,Warehouse) VALUES('0MN7','Rocks',180,3);
  INSERT INTO Boxes(Code,Contents,VALUE,Warehouse) VALUES('4H8P','Rocks',250,1);
@@ -40,6 +42,15 @@ CREATE TABLE Boxes (
  
  ____________________________________________________________________________________________________
  
- SELECT boxes.*,warehouses.location FROM boxes INNER JOIN warehouses ON (boxes.warehouse=warehouses.code);
+ Se han cogido algunos fragmentos de:
+ https://github.com/McD0n3ld/ServletConcierto.git
  
- NO esta controlado crear 2 cajas iguales
+ URL de la app:
+ http://localhost:8080/examen/servlet
+ 
+ Consideraciones:
+ 1) Se puede sacar una caja y se añade a la lista de cambios.
+ 2) Se puede crear una caja y se añade a la lista de cambios.
+ 3) Una caja que hayas sacado, se le puede asignar un nuevo almacen desde la lista de cambios.
+ 4) Se pueden eliminar acciones sobre la caja
+ 5) Se pueden validar cambios, haciendo un INSERT si son caja nuevas, un UPDATE si son cajas que han cambiado de almacen o DELETE si son cajas que no pertenecen a ningun almacen.
