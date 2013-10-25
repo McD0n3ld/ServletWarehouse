@@ -41,3 +41,5 @@ CREATE TABLE Boxes (
  ____________________________________________________________________________________________________
  
  SELECT boxes.*,warehouses.location FROM boxes INNER JOIN warehouses ON (boxes.warehouse=warehouses.code);
+ 
+ NO esta controlado crear 2 cajas iguales

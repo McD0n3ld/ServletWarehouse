@@ -38,7 +38,7 @@
 			<td>	
 <%
 	if (c.getEstado() == false) {
-		%><form name="gestionForm" action="/examen/servlet" method="POST">
+		%><form name="cambiosForm" action="/examen/servlet" method="POST">
 			<select name=ALMACEN><%
 		for(int i = 0;i<almacenes.size();i++){
 			%>
@@ -53,14 +53,6 @@
 	} else {
 %>		<%=c.getWarehouse_location() %><% } %>
 		</td>
-			
-			
-			
-			
-			
-			
-			
-			
 			<td>
 				<form name="deleteForm" action="/examen/servlet"
 					method="POST">
@@ -75,10 +67,10 @@
 		%>
 	</table>
 	<p>
-	<form name="checkoutForm" action="/ServletConcierto/ComprarEntradas"
+	<form name="checkoutForm" action="/examen/servlet"
 		method="POST">
-		<input type="hidden" name="action" value="CHECKOUT"> <input
-			type="submit" name="Checkout" value="NONONONONO">
+		<input type="hidden" name="action" value="VALIDAR"> <input
+			type="submit" name="Checkout" value="Validar cambios!">
 	</form>
 </center>
 <%

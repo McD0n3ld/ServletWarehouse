@@ -32,31 +32,7 @@ public class servlet extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// try {
-		// Context envContext = new InitialContext();
-		// Context initContext = (Context) envContext.lookup("java:/comp/env");
-		// DataSource ds = (DataSource)
-		// initContext.lookup("jdbc/datasource_conciertos");
-		// Connection con = ds.getConnection();
-		// Statement stmt = con.createStatement();
-		// String query =
-		// "SELECT boxes.*,warehouses.location FROM boxes INNER JOIN warehouses ON (boxes.warehouse=warehouses.code)";
-		// ResultSet rs = stmt.executeQuery(query);
-		// ArrayList<Caja> lista = new ArrayList<Caja>();
-		// while (rs.next()) {
-		// Caja c = new Caja();
-		// c.setCode(rs.getString("code"));
-		// c.setCode_warehouse(rs.getInt("warehouse"));
-		// c.setContents(rs.getString("contents"));
-		// c.setValue(rs.getInt("value"));
-		// c.setWarehouse_location(rs.getString("location"));
-		// lista.add(c);
-		// }
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// System.out.println("FALLA 1");
-		// }
-		// System.out.println("Si que entro");
+
 	}
 
 	/**
@@ -73,49 +49,60 @@ public class servlet extends HttpServlet {
 			lista = new ArrayList<Caja>();
 		// vamos a hacer una accion:
 		String action = req.getParameter("action");
-		
-		
+
 		if (action.equals("SACAR")) {
 			Caja c = sacarCaja(req);
 			lista.add(c);
 		} else if (action.equals("DELETE")) {
 			lista.remove(Integer.parseInt(req.getParameter("delindex")));
 		} else if (action.equals("GUARDAR")) {
-			//buscar la caja y modificarla
+			// buscar la caja y modificarla
 			Caja c = lista.get(Integer.parseInt(req.getParameter("modindex")));
 			c = modificarCaja(req, c);
-		}
-		
-		
+		} else if (action.equals("CREAR")) {
+			Caja c = new Caja();
+			c.setCode(req.getParameter("codigo"));
+			c.setContents(req.getParameter("contenido"));
+			c.setValue(Integer.parseInt(req.getParameter("valor")));
+			c = modificarCaja(req, c);
+			lista.add(c);
+		} else if (action.equals("VALIDAR"))
+
 		// refrescamos la session
 		session.putValue("historial", lista);
-        String url = "/crear_caja.jsp";
-        ServletContext sc = getServletContext();
-        RequestDispatcher rd = sc.getRequestDispatcher(url);
-        rd.forward(req, res);
+		String url = "/index.jsp";
+		ServletContext sc = getServletContext();
+		RequestDispatcher rd = sc.getRequestDispatcher(url);
+		rd.forward(req, res);
 	}
 
 	private Caja sacarCaja(HttpServletRequest req) {
 		String myCaja = req.getParameter("CAJA");
-		StringTokenizer t = new StringTokenizer(myCaja, " | ");
+		StringTokenizer t = new StringTokenizer(myCaja, "|");
 		Caja c = new Caja();
-		c.setCode(t.nextToken());
-		c.setContents(t.nextToken());
-		c.setValue(Integer.parseInt(t.nextToken()));
-		c.setWarehouse_location(t.nextToken());
+		String code = t.nextToken();
+		String content = t.nextToken();
+		String value = t.nextToken();
 		String tmp = t.nextToken();
-		tmp = tmp.substring(1,tmp.length()-1);
-		c.setCode_warehouse(Integer.parseInt(tmp));
-		c.setEstado(false);	//la hemos sacado
+		t = new StringTokenizer(tmp, "(");
+		String location = t.nextToken();
+		String id_location = t.nextToken();
+
+		c.setCode(code.substring(0, code.length() - 1));
+		c.setContents(content.substring(1, content.length() - 1));
+		c.setValue(Integer.parseInt(value.substring(1, value.length() - 1)));
+		c.setWarehouse_location(location.substring(1, location.length() - 1));
+		c.setCode_warehouse(Integer.parseInt(id_location.substring(0, id_location.length() - 1)));
+		c.setEstado(false); // la hemos sacado
 		return c;
 	}
-	
-	private Caja modificarCaja(HttpServletRequest req, Caja c)  {
+
+	private Caja modificarCaja(HttpServletRequest req, Caja c) {
 		String temp = req.getParameter("ALMACEN");
 		StringTokenizer t = new StringTokenizer(temp, "(");
 		c.setWarehouse_location(t.nextToken());
 		String tmp = t.nextToken();
-		tmp = tmp.substring(0,tmp.length()-1);
+		tmp = tmp.substring(0, tmp.length() - 1);
 		int id = Integer.parseInt(tmp);
 		c.setCode_warehouse(id);
 		c.setEstado(true);
