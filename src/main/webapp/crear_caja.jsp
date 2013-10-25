@@ -15,7 +15,7 @@
 	<center>
 		<form name="crearForm" action="/examen/servlet" method="POST">
 			<b>Código: </b><input type="text" name="codigo" SIZE="4" value="DSA1">
-			<b>Contenido: </b><input type="text" name="contenido" SIZE="25" value="Examen">
+			<b>Contenido: </b><input type="text" name="contenido" SIZE="25" value="CONTENIDO">
 			<b>Valor: </b><input type="text" name="valor" SIZE="5" value=99>
 			<b>Localización: </b><select name=ALMACEN>
 			<% for(int i = 0;i<almacenes.size();i++) {%>
